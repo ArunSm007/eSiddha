@@ -12,6 +12,7 @@ import javax.persistence.Table;
 @Table(name="logindetails")
 @Inheritance(strategy=InheritanceType.JOINED)
 public class LoginDetails {
+	
 	private String userName;
 	private String passWord;
 	private String userType;
