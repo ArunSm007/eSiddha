@@ -1,20 +1,19 @@
 package com.esiddha.controllers;
 
-import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-import com.esiddha.entities.AppointmentDetails;
-import com.esiddha.entities.AvailabilityDetails;
 import com.esiddha.entities.DoctorDetails;
+import com.esiddha.entities.LoginDetails;
 import com.esiddha.services.AppointmentServiceImpl;
 import com.esiddha.services.AvailabilityServiceImpl;
 import com.esiddha.services.LoginService;
@@ -23,47 +22,43 @@ import com.esiddha.services.LoginService;
 @EnableAutoConfiguration
 public class SiddhaController {
 	
-	LoginService impl;
-	AppointmentServiceImpl impl1;
-	AvailabilityServiceImpl impl2;
+	LoginService loginService;
+	AppointmentServiceImpl appointmentService;
+	AvailabilityServiceImpl availabilityService;
 	
-	public LoginService getImpl() {
-		return impl;
+	@Autowired
+	public void setLoginService(LoginService loginService) {
+		this.loginService = loginService;
 	}
 	
 	@Autowired
-	public void setImpl(LoginService impl) {
-		this.impl = impl;
+	public void setAppointmentService(AppointmentServiceImpl appointmentService) {
+		this.appointmentService = appointmentService;
 	}
 
-	public AppointmentServiceImpl getImpl1() {
-		return impl1;
-	}
-	
 	@Autowired
-	public void setImpl1(AppointmentServiceImpl impl1) {
-		this.impl1 = impl1;
-	}
-
-	public AvailabilityServiceImpl getImpl2() {
-		return impl2;
-	}
-	
-	@Autowired
-	public void setImpl2(AvailabilityServiceImpl impl2) {
-		this.impl2 = impl2;
+	public void setAvailabilityService(AvailabilityServiceImpl availabilityService) {
+		this.availabilityService = availabilityService;
 	}
 
 	@RequestMapping("/")
 	public String welcome(Map<String, Object> model) {
-		model.put("message", "hai");
+		LoginDetails loginDetails = new LoginDetails();
+		model.put("loginDetails", loginDetails);
 		return "index";
 	}
 	
-	@RequestMapping("/check")
-	public String print(@RequestBody String t1) {
-		System.out.println(t1+"content");
-		return "index";
+	@PostMapping("/login")
+	public String print(@ModelAttribute LoginDetails loginDetails,Map<String, Object> model) {
+		LoginDetails details = loginService.validateUser(loginDetails.getUserName(), loginDetails.getPassWord());
+		if(details == null){
+			model.put("message", "Invalid Username / Password");
+			return "index";
+		}
+		model.put("loginDetails", details);
+		if(details instanceof DoctorDetails)
+			return "doctorHome";
+		return "patientHome";
 	}
 
 }

@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <html lang="en">
 	<head>
 		<link rel="stylesheet" type="text/css" href="webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
@@ -21,10 +24,12 @@
 	</nav>
 
 	<div class="container">
-		<form method="post" action="/check">
-			<input type="text" name="t1">
+		<form:form method="POST" commandName="loginDetails" action="login">
+			<form:input type="text" path="userName" />
+			<form:input type="password" path="passWord" />
 			<input type="submit" value="Submit">
-		</form>
+			${message}
+		</form:form>
 	</div>
 
 </body>
