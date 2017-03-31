@@ -54,11 +54,11 @@ public class SiddhaController {
 		this.impl2 = impl2;
 	}
 
-//	@RequestMapping("/")
-//	public String welcome(Map<String, Object> model) {
-//		model.put("message", "hai");
-//		return "index";
-//	}
+	@RequestMapping("/")
+	public String welcome(Map<String, Object> model) {
+		model.put("message", "hai");
+		return "index";
+	}
 	
 	@RequestMapping("/check")
 	public String print(@RequestBody String t1) {
